@@ -6,6 +6,7 @@ use App\Http\Controllers\CustomAuthController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DomainController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +33,7 @@ Route::get('/registration', [CustomAuthController::class, 'registration'])->name
 Route::post('/register-user',[CustomAuthController::class, 'registerUser'])->name('register-user');
 Route::post('/login-user', [CustomAuthController::class, 'loginUser'])->name('login-user');
 Route::get('/dashboard',[CustomAuthController::class,'dashboard']);
+Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -49,10 +51,14 @@ Route::get('/domains', [DomainController::class, 'index'])->name('domains.index'
 Route::get('/domains/create', [DomainController::class, 'create'])->name('domains.create');
 Route::post('/domains', [DomainController::class, 'store'])->name('domains.store');
 Route::delete('/domains/{domain}', [DomainController::class, 'destroy'])->name('domains.destroy');
+Route::get('/domains/status', [DomainController::class, 'status'])->name('domains.status');
 //lookup api route
 Route::post('/lookup', [DomainController::class, 'lookup'])->name('lookup');
 
 //users routes
 Route::get('/users', [UserController::class, 'index'])->name('users.index');
 Route::get('/users/add', [UserController::class, 'create'])->name('users.create');
-Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
+Route::post('/users', [UserController::class, 'store'])->name('users.store');
+Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
+Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
+Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');

@@ -1,37 +1,29 @@
 @extends('adminlte::page')
 
-@section('title', 'Dashboard')
+@section('title', 'Domain Status')
 
 @section('content_header')
-    <h1>Dashboard</h1>
+    <h1>Status</h1>
 @stop
 
 @section('content')
-    <div class="container-fluid">
-        <div class="row">
-          <div class="col-6">
-              <div class="info-box">
-                <span class="info-box-icon bg-info elevation-1"><i class="fas fa-check-circle"></i></span>
-                  <div class="info-box-content">
-                    <span class="info-box-text "><h4 class="fw-bold">Active Domains</h4></span>
-                      <span class="info-box-number" style="font-size: 22px;">{{ $activeCount }}</span>
-                  </div>
-              </div>
-          </div>
-          <div class="col-6">
-              <div class="info-box mb-3">
-                <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-exclamation-circle"></i></span>
-                  <div class="info-box-content">
-                      <span class="info-box-text fw-bold"><h4 class="fw-bold">Expired Domains</h4></span>
-                      <span class="info-box-number" style="font-size: 22px;">{{ $expiredCount}}</span>
-                  </div>
-              </div>
-          </div>
-        </div>
-    </div>
-    <div class="col-lg-12 mx-1">
+<div class="col-lg-12 mx-1">
     <div class="jumbotron">
-        
+        <form method="post" action="" id="updateDomainsForm">
+            @csrf
+            <div class="row">
+                <div class="col-md-8">
+                    <h3 class="display-6 mb-0">Domain Status</h3>
+                </div>
+                
+                <div class="col-md-4 text-right">
+                    <button type="submit" class="btn btn-outline-success" id="updateDomainsButton">
+                        <i class="fas fa-file-export"></i> Export data
+                    </button>
+                </div>
+                
+            </div>
+        </form>
         <hr class="my-4">
 
         <table class="display" id="domainTable">
@@ -58,7 +50,9 @@
         </table>
     </div>
 </div>
+</div>
 @stop
+
 @section('js')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
     <script type="text/javascript" src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
@@ -69,9 +63,34 @@
         $(document).ready(function () {
             var table = $('#domainTable').DataTable({
                 lengthChange: false,
-                searching:false,
                 pageLength: 10,
-               
+                initComplete: function () {
+                    // Delay the execution by 100 milliseconds
+                    setTimeout(function () {
+                        fetchAndUpdateUpdatedColumn(table);
+                    }, 100);
+                    this.api().columns().every(function (index) {
+                        // Check if it's the 1st or 4th column (index 0 or 3)
+                        if (index === 0 || index === 3) {
+                            let column = this;
+                            let title = column.header().textContent;
+
+                            // Create input element
+                            let input = document.createElement('input');
+                            input.placeholder = title;
+
+                            // Append input to the header row
+                            $(column.header()).append(input);
+
+                            // Event listener for user input
+                            input.addEventListener('keyup', () => {
+                                if (column.search() !== input.value) {
+                                    column.search(input.value).draw();
+                                }
+                            });
+                        }
+                    });
+                }
             });
 
             // Add an event listener to the export button
@@ -125,12 +144,4 @@
             }
         });
     </script>
-@stop
-
-@section('css')
-    <link rel="stylesheet" href="/css/admin_custom.css">
-@stop
-
-@section('js')
-    <script> console.log('Hi!'); </script>
 @stop

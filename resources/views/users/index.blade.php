@@ -37,9 +37,16 @@
                     <td>{{ $user->name }}</td>
                     <td>{{ $user->email }}</td>
                     <td>
-                        <a href="" class="btn text-secondary px-0">
-                            <i class="far fa-edit fa-lg"></i> 
-                        </a>
+                    <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary  mx-2">
+                        <i class="far fa-edit fa-lg"></i> 
+                    </a>
+                    <form action="{{ route('users.destroy', $user->id) }}" method="post" class="d-inline">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete the user?')">
+                                <i class="far fa-trash-alt"></i> 
+                            </button>
+                    </form>
                     </td>
                 </tr>
                 @endforeach

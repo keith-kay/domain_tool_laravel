@@ -38,7 +38,7 @@
                     <td>{{ $company->address }}</td>
                     <td>{{ $company->location }}</td>
                     <td>
-                        <a href="{{ route('companies.edit', $company->id) }}" class="btn btn-secondary mx-2">
+                        <a href="{{ route('companies.edit', $company->id) }}" class="btn btn-primary mx-2">
                             <i class="far fa-edit"></i> 
                         </a>
                         <form action="{{ route('companies.destroy', $company->id) }}" method="post" class="d-inline">

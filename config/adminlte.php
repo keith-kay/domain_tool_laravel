@@ -334,7 +334,7 @@ return [
         ['header' => 'USER'],
         [
             'text' => 'Manage Users',
-            'url'  => 'admin/settings',
+            'url'  => '/users',
             'icon' => 'fas fa-fw fa-user',
         ],
         // [
@@ -383,18 +383,18 @@ return [
         ['header' => 'COMPANY'],
         [
             'text' => 'Manage Company',
-            'url'  => 'admin/settings',
+            'url'  => '/companies',
             'icon' => 'fas fa-building',
         ],
         ['header' => 'DOMAIN'],
         [
             'text' => 'Manage Domain',
-            'url'  => 'admin/settings',
+            'url'  => '/domains',
             'icon' => 'fas fa-server',
         ],
         [
             'text' => 'Domain Status',
-            'url'  => 'admin/settings',
+            'url'  => 'domains/status',
             'icon' => 'fas fa-server',
         ],
         

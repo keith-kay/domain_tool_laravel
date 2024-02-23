@@ -49,18 +49,17 @@
                     <td> {{ $domain->name }}</td>
                     <td> {{ $domain->registration_date }}</td>
                     <td> {{ $domain->expiry_date }}</td>
-                    <td> {{ $domain->company }}</td>
+                    <td> {{ $domain->company->name }}</td>
                     <td> {{ $domain->registrar_name }}</td>
-                    @if(auth()->user()->is_admin)
                     <td>
-                        <form action="{{ route('domain_delete', $domain->id) }}" method="post" class="d-inline">
+                        <form action="{{ route('domains.destroy', $domain->id) }}" method="post" class="d-inline">
                             @csrf
+                            @method('DELETE')
                             <button type="submit" class="btn" onclick="return confirm('Are you sure you want to delete domain?')">
                                 <i class="far fa-trash-alt fa-lg text-danger float-right"></i>
                             </button>
                         </form>
                     </td>
-                    @endif
                 </tr>
                 @endforeach
             </tbody>    

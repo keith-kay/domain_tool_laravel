@@ -1,15 +1,16 @@
+<!-- Edit Form View (edit.blade.php) -->
 @extends('adminlte::page')
 
-@section('title', 'Add User')
+@section('title', 'Edit User')
 
 @section('content_header')
-    <h1>Add User</h1>
+    <h1>Edit User</h1>
 @stop
 
 @section('content')
 <div class="col-lg-12 mx-1">
     <div class="jumbotron">
-        <h3 class="display-6">Add User</h3>
+        <h3 class="display-6">Edit User</h3>
         <hr class="my-4">
         @if(session('error'))
             <div class="alert alert-danger">
@@ -17,22 +18,23 @@
             </div>
         @endif
 
-        <form action="{{ route('users.store') }}" method="post" autocomplete="off">
+        <form action="{{ route('users.update', $user->id) }}" method="post" autocomplete="off">
             @csrf
+            @method('PUT')
             <div class="row">
                 <div class="col-md-8">
                     <label for="name" class="form-label">Name</label>
-                    <input type="text" required class="form-control" id="name" name="name" placeholder="Enter User Name" value="{{ old('name') }}">
+                    <input type="text" required class="form-control" id="name" name="name" placeholder="Enter User Name" value="{{ old('name', $user->name) }}">
                     <span class="text-danger">@error('name') {{$message}} @enderror</span>
                 </div>
                 <div class="col-md-4">
                     <label for="password" class="form-label">Password</label>
-                    <input type="password" required class="form-control" id="password" name="password" placeholder="Enter User Password" value="{{ old('password') }}">
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Enter User Password" value="{{ old('password', $user->password) }}">
                     <span class="text-danger">@error('password') {{$message}} @enderror</span>
                 </div>
                 <div class="col-md-8">
                     <label for="email" class="form-label">Email</label>
-                    <input type="email" required class="form-control" id="email" name="email" placeholder="Enter User Email" value="{{ old('email') }}">
+                    <input type="email" required class="form-control" id="email" name="email" placeholder="Enter User Email" value="{{ old('email', $user->email) }}">
                     <span class="text-danger">@error('email') {{$message}} @enderror</span>
                 </div>
                 <br>
@@ -40,15 +42,15 @@
             <div class="form-group my-3">
                 <div class="col-md-2" style="display: inline-block; margin-right: 10px; margin-bottom: 10px;">
                     <label for="is_user" class="form-label mx-2">User</label>
-                    <input type="checkbox" id="is_user" name="is_user" value="1">
+                    <input type="checkbox" id="is_user" name="is_user" value="1" {{ $user->is_user ? 'checked' : '' }}>
                 </div>
                 <div class="col-md-2" style="display: inline-block; margin-right: 10px; margin-bottom: 10px;">
                     <label for="is_admin" class="form-label mx-2">Admin</label>
-                    <input type="checkbox" id="is_admin" name="is_admin" value="1">
+                    <input type="checkbox" id="is_admin" name="is_admin" value="1" {{ $user->is_admin ? 'checked' : '' }}>
                 </div>
                 <div class="col-md-2" style="display: inline-block; margin-right: 10px; margin-bottom: 10px;">
                     <label for="is_active" class="form-label mx-2">Active</label>
-                    <input type="checkbox" id="is_active" name="is_active" checked value="1">
+                    <input type="checkbox" id="is_active" name="is_active" value="1" {{ $user->is_active ? 'checked' : '' }}>
                 </div>
             </div>
             <div class="row my-3">
@@ -65,7 +67,6 @@
     </div>
 </div>
 @stop
-
 @section('js')
     @parent
     <script>
@@ -95,3 +96,4 @@
     });
     </script>
 @stop
+
