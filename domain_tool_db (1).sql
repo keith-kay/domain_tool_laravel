@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 23, 2024 at 10:12 AM
+-- Generation Time: Feb 26, 2024 at 07:51 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -53,13 +53,25 @@ INSERT INTO `companies` (`id`, `name`, `address`, `location`, `created_at`, `upd
 CREATE TABLE `domains` (
   `id` int(10) UNSIGNED NOT NULL,
   `name` varchar(255) NOT NULL,
-  `registration_date` datetime DEFAULT NULL,
-  `expiry_date` datetime DEFAULT NULL,
+  `registration_date` timestamp NULL DEFAULT NULL,
+  `expiry_date` timestamp NULL DEFAULT NULL,
   `registrar_name` varchar(255) DEFAULT NULL,
   `company_id` int(10) UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `domains`
+--
+
+INSERT INTO `domains` (`id`, `name`, `registration_date`, `expiry_date`, `registrar_name`, `company_id`, `created_at`, `updated_at`) VALUES
+(1, 'grainbulk.com', '1998-08-24 01:00:00', '2024-08-23 01:00:00', 'Network Solutions, LLC', 1, '2024-02-23 16:51:04', '2024-02-25 19:12:45'),
+(2, 'mbarakibulk.com', '2006-01-12 00:00:23', '2026-01-12 00:00:23', 'DNC Holdings, Inc', 1, '2024-02-23 17:06:58', '2024-02-25 19:12:45'),
+(4, 'occl.co.ke', '2016-06-30 03:21:48', '2025-06-30 03:21:48', 'Safaricom Limited', 1, '2024-02-23 17:52:43', '2024-02-25 19:12:45'),
+(5, 'wasinimaritime.co.ke', '2017-11-22 04:09:38', '2025-11-22 04:09:38', 'Kenya Network Information Centre', 1, '2024-02-23 17:53:11', '2024-02-23 17:53:11'),
+(6, 'onepet.co.ke', '2011-06-23 11:19:49', '2026-06-23 11:19:49', 'MTN Business', 1, '2024-02-23 18:07:00', '2024-02-25 19:12:45'),
+(8, 'fumbaports.com', '2023-07-26 08:10:58', '2026-07-26 08:10:58', 'NAMECHEAP INC', 1, '2024-02-25 19:09:35', '2024-02-25 19:12:46');
 
 -- --------------------------------------------------------
 
@@ -175,7 +187,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `created_at`, `updated_at`, `is_admin`, `is_user`, `is_active`) VALUES
-(2, 'admin', 'admin@bulkstream.com', '$2y$12$mfivsQ.E92JzUw/SzEPX/.bLDqfsfsaQs2p0NKR10TBYxUBfznpNK', '2024-02-22 06:25:02', '2024-02-22 06:25:02', 0, 0, 0);
+(2, 'admin', 'admin@bulkstream.com', '$2y$12$mfivsQ.E92JzUw/SzEPX/.bLDqfsfsaQs2p0NKR10TBYxUBfznpNK', '2024-02-22 06:25:02', '2024-02-22 06:25:02', 1, 0, 1),
+(4, 'trial user', '123@gmail.com', '$2y$12$9VN8CSl0FZgrSohjstDPD.npB9tzT1wu5N6axoc2t2uv6X8G67qOy', '2024-02-23 10:21:59', '2024-02-23 10:21:59', 0, 1, 1),
+(5, 'johndoe', 'jd@gmail.com', '$2y$12$38oGE2JaHrsnGPxDGgE1EuyVrHsPnMGDzXqMHyvzjGowh1yyoJYDK', '2024-02-26 03:45:03', '2024-02-26 03:45:03', 0, 1, 1);
 
 --
 -- Indexes for dumped tables
@@ -242,13 +256,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `companies`
 --
 ALTER TABLE `companies`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `domains`
 --
 ALTER TABLE `domains`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -272,7 +286,7 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Constraints for dumped tables
