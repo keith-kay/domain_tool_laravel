@@ -7,9 +7,42 @@
 @stop
 
 @section('content')
+<style>
+    .preloader-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.8); /* semi-transparent white background */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+    }
+
+    .spinner {
+        border: 4px solid rgba(0, 0, 0, 0.1);
+        border-radius: 50%;
+        border-top: 4px solid #3498db;
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .ajs-success {
+        background-color: #4CAF50; 
+        color: #ffffff;
+    }
+</style>
 <div class="col-lg-12 mx-1">
     <div class="jumbotron">
-        <form method="post" action="" id="updateDomainsForm">
+        <form id="updateDomainsForm">
             @csrf
             <div class="row">
                 <div class="col-md-8">
@@ -17,7 +50,7 @@
                 </div>
                 
                 <div class="col-md-4 text-right">
-                    <button type="submit" class="btn btn-outline-success" id="updateDomainsButton">
+                    <button type="button" class="btn btn-outline-success" id="updateDomainsButton">
                         <i class="fas fa-sync-alt"></i> Update Domains
                     </button>
                 </div>
@@ -33,14 +66,12 @@
                     <td> Date of Registration</td>
                     <td> Date of Expiry</td>
                     <td> Company <br></td>
-                    <td> Registrar Name <br></td>&nbsp;
-                   
-                    <td> 
-                        <a href="{{ route('domains.create') }}" class="btn btn-outline-success">
-                            <i class= "fas fa-plus"></i>Add New
+                    <td> Registrar Name <br></td>
+                    <th>
+                        <a href="{{ route('domains.create') }}" class="btn btn-success">
+                            <i class="fas fa-plus"></i> Add New
                         </a>
-                    </td>
-                    
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -66,8 +97,8 @@
         </table>
     </div>
 </div>
-</div>
 @stop
+
 @section('js')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
     <script type="text/javascript" src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
@@ -93,33 +124,24 @@
                 spinner.removeClass('spin');
             }
         
-            
-            // Attach a submit event listener to the "Update Domains" button
-            $('#updateDomainsForm').submit(function (event) {
-                event.preventDefault(); // Prevent the default form submission
-                
-                showPreloader(); // Show the preloader before submitting the form
+            // Attach click event listener to the "Update Domains" button
+            $('#updateDomainsButton').click(function () {
+                showPreloader(); // Show preloader
                 
                 $.ajax({
-                    url: '{% url "update_domains_result" %}',
+                    url: '{{ route("domains.updateExpiryDates") }}',
                     method: 'POST',
-                    data: $(this).serialize(),
+                    data: $('#updateDomainsForm').serialize(),
                     success: function (data) {
-                        console.log(data); // Debugging: Log the response data to console
-                        hidePreloader(); // Hide the preloader
-                        
-                        // Display success message
-                        showAlert(data.message || successMessage, 'success');
-                        // Refresh the page after 2 seconds (adjust the timeout as needed)
-                        setTimeout(function() {
-                            window.location.reload();
-                        }, 3000);
+                        console.log(data); // Log response data
+                        hidePreloader(); // Hide preloader
+                        // Reload the page after successful update
+                        window.location.reload();
                     },
                     error: function (xhr, status, error) {
-                        hidePreloader(); // Hide the preloader
-                        
-                        // Display error message
-                        showAlert(xhr.responseJSON ? xhr.responseJSON.message || errorMessage : errorMessage, 'error');
+                        console.error(xhr.responseText); // Log error response
+                        hidePreloader(); // Hide preloader
+                        // Handle error
                     }
                 });
             });

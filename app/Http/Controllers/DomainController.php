@@ -8,6 +8,7 @@ use App\Models\Company;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 
+
 class DomainController extends Controller
 {
     public function index()
@@ -38,6 +39,7 @@ class DomainController extends Controller
             $apiUrl = "https://whoisjsonapi.com/v1/$domainValue";
     
             // Set the headers for the request
+
             $headers = [
                 'Authorization' => "Bearer $apiToken",
             ];
@@ -120,5 +122,71 @@ class DomainController extends Controller
         $domains = Domain::all();
         $domains = Domain::with('company')->get();
         return view('domains.status', compact('domains'));
+    }
+    public function updateExpiryDates(Request $request)
+    {
+        // Define WHOIS API endpoint URL
+        $whoisApiBaseUrl = 'https://whoisjsonapi.com/v1/';
+        // Define WHOIS API token
+        $apiToken = env('API_TOKEN');
+
+        // Create a new Guzzle HTTP client instance
+        $client = new Client();
+
+        try {
+            // Get a list of all domains
+            $domains = Domain::all();
+
+            foreach ($domains as $domain) {
+                // Skip specific domain(s) if necessary
+                if ($domain->name === 'wasinimaritime.co.ke') {
+                    continue;
+                }
+
+                // Construct the complete WHOIS API URL for the domain
+                $whoisApiUrl = $whoisApiBaseUrl . $domain->name;
+
+                // Perform WHOIS query for each domain
+                $response = $client->request('GET', $whoisApiUrl, [
+                    'headers' => [
+                        'Authorization' => 'Bearer ' . $apiToken,
+                    ],
+                ]);
+
+                // Extract expiry date from the WHOIS API response
+                $responseBody = $response->getBody()->getContents();
+                $responseData = json_decode($responseBody, true);
+                $expiryDateStr = $responseData['domain']['expiration_date'];
+
+                // Parse expiry date
+                if ($expiryDateStr) {
+                    try {
+                        // Attempt to create a DateTime object from the expiry date string
+                        $expiryDate = new DateTime($expiryDateStr);
+
+                        // Update domain's expiry_date
+                        $domain->expiry_date = $expiryDate;
+                        $domain->save();
+                    } catch (\Exception $e) {
+                        // Handle parsing errors if necessary
+                        continue;
+                    }
+                }
+            }
+
+            // Success message
+            $message = 'Domains updated successfully.';
+            
+            // Return success JSON response
+            return response()->json(['success' => true, 'message' => $message]);
+        } catch (\Exception $e) {
+            // Log error
+            \Log::error('Error updating domains: ' . $e->getMessage());
+            // Error message
+            $message = 'Error updating domains: ' . $e->getMessage();
+            
+            // Return error JSON response
+            return response()->json(['success' => false, 'message' => $message], 500);
+        }
     }
 }

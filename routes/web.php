@@ -52,6 +52,7 @@ Route::get('/domains/create', [DomainController::class, 'create'])->name('domain
 Route::post('/domains', [DomainController::class, 'store'])->name('domains.store');
 Route::delete('/domains/{domain}', [DomainController::class, 'destroy'])->name('domains.destroy');
 Route::get('/domains/status', [DomainController::class, 'status'])->name('domains.status');
+Route::post('domains/update-expiry-dates', [DomainController::class, 'updateExpiryDates'])->name('domains.updateExpiryDates');
 //lookup api route
 Route::post('/lookup', [DomainController::class, 'lookup'])->name('lookup');
 
