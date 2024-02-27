@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 26, 2024 at 07:51 AM
+-- Generation Time: Feb 27, 2024 at 07:20 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -189,7 +189,7 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `created_at`, `updated_at`, `is_admin`, `is_user`, `is_active`) VALUES
 (2, 'admin', 'admin@bulkstream.com', '$2y$12$mfivsQ.E92JzUw/SzEPX/.bLDqfsfsaQs2p0NKR10TBYxUBfznpNK', '2024-02-22 06:25:02', '2024-02-22 06:25:02', 1, 0, 1),
 (4, 'trial user', '123@gmail.com', '$2y$12$9VN8CSl0FZgrSohjstDPD.npB9tzT1wu5N6axoc2t2uv6X8G67qOy', '2024-02-23 10:21:59', '2024-02-23 10:21:59', 0, 1, 1),
-(5, 'johndoe', 'jd@gmail.com', '$2y$12$38oGE2JaHrsnGPxDGgE1EuyVrHsPnMGDzXqMHyvzjGowh1yyoJYDK', '2024-02-26 03:45:03', '2024-02-26 03:45:03', 0, 1, 1);
+(5, 'johndoe', 'jd@gmail.com', '$2y$12$hZvC43He3WGkhbqw1lzeT.oy2DDmtQwnGk9cBNRqXIuiROaV8KAV.', '2024-02-26 03:45:03', '2024-02-27 02:58:48', 0, 1, 1);
 
 --
 -- Indexes for dumped tables
@@ -256,13 +256,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `companies`
 --
 ALTER TABLE `companies`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `domains`
 --
 ALTER TABLE `domains`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`

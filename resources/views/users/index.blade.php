@@ -25,9 +25,11 @@
                     <td>Name</td>
                     <td>Email</td>
                     <td>
-                        <a href="{{ route('users.create') }}" class="btn btn-outline-success">
-                            <i class= "fas fa-plus"></i> Add New User
-                        </a>
+                        @if(auth()->user()->is_admin)
+                            <a href="{{ route('users.create') }}" class="btn btn-outline-success">
+                                <i class= "fas fa-plus"></i> Add New User
+                            </a>
+                        @endif
                     </td>
                 </tr>
             </thead>
