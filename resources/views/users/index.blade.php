@@ -1,3 +1,4 @@
+
 @extends('adminlte::page')
 
 @section('title', 'Manage Users')
@@ -7,6 +8,84 @@
 @stop
 
 @section('content')
+@if(auth()->user()->is_admin)
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<style>
+    .colored-toast.swal2-icon-success {
+    background-color: #28a745 !important;
+    }
+
+    .colored-toast.swal2-icon-error {
+    background-color: #f27474 !important;
+    }
+
+    .colored-toast.swal2-icon-warning {
+    background-color: #f8bb86 !important;
+    }
+
+    .colored-toast.swal2-icon-info {
+    background-color: #3fc3ee !important;
+    }
+
+    .colored-toast.swal2-icon-question {
+    background-color: #87adbd !important;
+    }
+
+    .colored-toast .swal2-title {
+    color: white;
+    }
+
+    .colored-toast .swal2-close {
+    color: white;
+    }
+
+    .colored-toast .swal2-html-container {
+    color: white;
+    }
+</style>
+<div class="container my-3">
+@if(session('success'))
+    <script>
+        const Toast = Swal.mixin({
+  toast: true,
+  position: 'top-right',
+  iconColor: 'white',
+  customClass: {
+    popup: 'colored-toast',
+  },
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+});
+(async () => {
+  await Toast.fire({
+    icon: 'success',
+    title: "{{session('success')}}",
+  })
+})()
+</script>
+@elseif(session('error'))
+    <script>
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-right',
+            iconColor: 'white',
+            customClass: {
+                popup: 'colored-toast',
+            },
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+        });
+        (async () => {
+            await Toast.fire({
+                icon: 'error',
+                title: "{{ session('error') }}",
+            })
+        })();
+    </script>
+@endif
+</div>
 <div class="col-lg-12 mx-1">
     <div class="jumbotron">
         <form method="post" action="" id="updateDomainsForm">
@@ -24,13 +103,13 @@
                 <tr>
                     <td>Name</td>
                     <td>Email</td>
-                    <td>
-                        @if(auth()->user()->is_admin)
+                    @if(auth()->user()->is_admin)
+                        <td>
                             <a href="{{ route('users.create') }}" class="btn btn-outline-success">
-                                <i class= "fas fa-plus"></i> Add New User
+                                <i class="fas fa-plus"></i> Add New User
                             </a>
-                        @endif
-                    </td>
+                        </td>
+                    @endif
                 </tr>
             </thead>
             <tbody>
@@ -38,6 +117,7 @@
                 <tr>
                     <td>{{ $user->name }}</td>
                     <td>{{ $user->email }}</td>
+                    @if(auth()->user()->is_admin)
                     <td>
                     <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary  mx-2">
                         <i class="far fa-edit fa-lg"></i> 
@@ -50,6 +130,7 @@
                             </button>
                     </form>
                     </td>
+                    @endif
                 </tr>
                 @endforeach
             </tbody>
@@ -57,6 +138,14 @@
     </div>
 </div>
 </div>
+@else
+        <div class="alert alert-danger">
+            You do not have permission to access this page. Please contact the administrator for access rights.
+        </div>
+        <div class="alert text-center my-5">
+        <i class="fa fa-ban" aria-hidden="true" style="color: red; font-size: 80px;"></i>
+        </div>
+@endif
 @stop
 
 @section('js')

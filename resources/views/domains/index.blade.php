@@ -7,6 +7,7 @@
 @stop
 
 @section('content')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>
     .preloader-container {
         position: fixed;
@@ -39,7 +40,84 @@
         background-color: #4CAF50; 
         color: #ffffff;
     }
+    .colored-toast.swal2-icon-success {
+    background-color: #28a745 !important;
+    }
+
+    .colored-toast.swal2-icon-error {
+    background-color: #f27474 !important;
+    }
+
+    .colored-toast.swal2-icon-warning {
+    background-color: #f8bb86 !important;
+    }
+
+    .colored-toast.swal2-icon-info {
+    background-color: #3fc3ee !important;
+    }
+
+    .colored-toast.swal2-icon-question {
+    background-color: #87adbd !important;
+    }
+
+    .colored-toast .swal2-title {
+    color: white;
+    }
+
+    .colored-toast .swal2-close {
+    color: white;
+    }
+
+    .colored-toast .swal2-html-container {
+    color: white;
+    }
 </style>
+<div class="preloader-container" style="display: none">
+    <div class="spinner"></div>
+</div>
+<div class="container my-3">
+@if(session('success'))
+    <script>
+        const Toast = Swal.mixin({
+  toast: true,
+  position: 'top-right',
+  iconColor: 'white',
+  customClass: {
+    popup: 'colored-toast',
+  },
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+});
+(async () => {
+  await Toast.fire({
+    icon: 'success',
+    title: "{{session('success')}}",
+  })
+})()
+</script>
+@elseif(session('error'))
+    <script>
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-right',
+            iconColor: 'white',
+            customClass: {
+                popup: 'colored-toast',
+            },
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+        });
+        (async () => {
+            await Toast.fire({
+                icon: 'error',
+                title: "{{ session('error') }}",
+            })
+        })();
+    </script>
+@endif
+</div>
 <div class="col-lg-12 mx-1">
     <div class="jumbotron">
         <form id="updateDomainsForm">
@@ -48,13 +126,13 @@
                 <div class="col-md-8">
                     <h3 class="display-6 mb-0">Manage Domains</h3>
                 </div>
-                
+                @if(auth()->user()->is_admin)
                 <div class="col-md-4 text-right">
                     <button type="button" class="btn btn-outline-success" id="updateDomainsButton">
                         <i class="fas fa-sync-alt"></i> Update Domains
                     </button>
                 </div>
-                
+                @endif
             </div>
         </form>
         <hr class="my-4">
@@ -67,11 +145,13 @@
                     <td> Date of Expiry</td>
                     <td> Company <br></td>
                     <td> Registrar Name <br></td>
+                    @if(auth()->user()->is_admin)
                     <th>
                         <a href="{{ route('domains.create') }}" class="btn btn-success">
                             <i class="fas fa-plus"></i> Add New
                         </a>
                     </th>
+                    @endif
                 </tr>
             </thead>
             <tbody>
@@ -82,6 +162,7 @@
                     <td> {{ $domain->expiry_date }}</td>
                     <td> {{ $domain->company->name }}</td>
                     <td> {{ $domain->registrar_name }}</td>
+                    @if(auth()->user()->is_admin)
                     <td>
                         <form action="{{ route('domains.destroy', $domain->id) }}" method="post" class="d-inline">
                             @csrf
@@ -91,6 +172,7 @@
                             </button>
                         </form>
                     </td>
+                    @endif
                 </tr>
                 @endforeach
             </tbody>    
@@ -128,22 +210,45 @@
             $('#updateDomainsButton').click(function () {
                 showPreloader(); // Show preloader
                 
-                $.ajax({
-                    url: '{{ route("domains.updateExpiryDates") }}',
-                    method: 'POST',
-                    data: $('#updateDomainsForm').serialize(),
-                    success: function (data) {
-                        console.log(data); // Log response data
-                        hidePreloader(); // Hide preloader
-                        // Reload the page after successful update
-                        window.location.reload();
+            $.ajax({
+            url: '{{ route("domains.updateExpiryDates") }}',
+            method: 'POST',
+            data: $('#updateDomainsForm').serialize(),
+            success: function (data) {
+                console.log(data); // Log response data
+                hidePreloader(); // Hide preloader
+                
+                // Define success message
+                var successMessage = data.message;
+
+                // Display success message using SweetAlert2
+                Swal.fire({
+                    toast: true,
+                    position: 'top-right',
+                    icon: 'success',
+                    iconColor: 'white',
+                    title: successMessage,
+                    customClass: {
+                        popup: 'colored-toast',
                     },
-                    error: function (xhr, status, error) {
-                        console.error(xhr.responseText); // Log error response
-                        hidePreloader(); // Hide preloader
-                        // Handle error
-                    }
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
                 });
+                
+
+                // Reload the page after successful update
+                setTimeout(function() {
+                    // Reload the page after successful update
+                    window.location.reload();
+                }, 3000);
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText); // Log error response
+                hidePreloader(); // Hide preloader
+                // Handle error
+            }
+        });
             });
         });
     </script>

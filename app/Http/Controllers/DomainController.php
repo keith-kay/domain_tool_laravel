@@ -7,6 +7,8 @@ use App\Models\Domain;
 use App\Models\Company;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
+use App\Mail\WeeklyDomainUpdate;
+use Illuminate\Support\Facades\Mail;
 
 
 class DomainController extends Controller
@@ -115,7 +117,7 @@ class DomainController extends Controller
     public function destroy(Domain $domain)
     {
         $domain->delete();
-        return redirect()->route('domains.index')->with('success', 'Domain deleted successfully');
+        return redirect()->route('domains.index')->with('error', 'Domain deleted!');
     }
     public function status()
     {
@@ -123,6 +125,7 @@ class DomainController extends Controller
         $domains = Domain::with('company')->get();
         return view('domains.status', compact('domains'));
     }
+    
     public function updateExpiryDates(Request $request)
     {
         // Define WHOIS API endpoint URL
@@ -174,11 +177,8 @@ class DomainController extends Controller
                 }
             }
 
-            // Success message
-            $message = 'Domains updated successfully.';
-            
             // Return success JSON response
-            return response()->json(['success' => true, 'message' => $message]);
+            return response()->json(['success' => true, 'message' => 'Domains updated successfully.']);
         } catch (\Exception $e) {
             // Log error
             \Log::error('Error updating domains: ' . $e->getMessage());
@@ -189,4 +189,6 @@ class DomainController extends Controller
             return response()->json(['success' => false, 'message' => $message], 500);
         }
     }
+
+    
 }

@@ -15,13 +15,13 @@
                 <div class="col-md-8">
                     <h3 class="display-6 mb-0">Domain Status</h3>
                 </div>
-                
+                @if(auth()->user()->is_admin)
                 <div class="col-md-4 text-right">
                     <button type="submit" class="btn btn-outline-success" id="updateDomainsButton">
                         <i class="fas fa-file-export"></i> Export data
                     </button>
                 </div>
-                
+                @endif
             </div>
         </form>
         <hr class="my-4">
