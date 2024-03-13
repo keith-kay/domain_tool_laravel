@@ -68,7 +68,7 @@ class UserController extends Controller
                 'password' => 'nullable|string|min:8',
                 'is_user' => 'nullable|boolean',
                 'is_admin' => 'nullable|boolean', 
-                'is_active' => ['required', 'boolean', function ($attribute, $value, $fail) {
+                'is_active' => ['boolean', function ($attribute, $value, $fail) {
                     if (!filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE)) {
                         $fail($attribute.' must be true or false.');
                     }

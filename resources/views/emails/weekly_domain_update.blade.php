@@ -6,11 +6,13 @@
     <title>Weekly Domain Update</title>
 </head>
 <body>
-    <h1>Weekly Domain Update</h1>
-    <p>Domains updated successfully!</p>
-    <p>Total Domains: {{ $totalDomains }}</p>
-    <p>Active Domains: {{ $activeDomains }}</p>
-    <p>Expired Domains: {{ $expiredDomains }}</p>
+    <h3>Weekly Domain Update</h3>
+    <p ><strong>Domains updated successfully!</strong></p>
+    <ul>
+        <li>Total Domains: {{ $totalDomains }}</li>
+        <li>Active Domains: {{ $activeDomains }}</li>
+        <li>Expired Domains: {{ $expiredDomains }}</li>
+    </ul>    
     <p>Timestamp: {{ $timestamp }}</p>
 </body>
 </html>

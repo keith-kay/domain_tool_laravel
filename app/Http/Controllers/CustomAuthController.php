@@ -48,12 +48,21 @@ class CustomAuthController extends Controller
 
     $credentials = $request->only('email', 'password');
 
-    if (Auth::attempt($credentials)) {
-        // Authentication successful
-        return redirect()->intended('dashboard');
+    // Retrieve the user by their email
+    $user = User::where('email', $credentials['email'])->first();
+
+    if ($user && $user->is_active) {
+        // If the user exists and is active, attempt authentication
+        if (Auth::attempt($credentials)) {
+            // Authentication successful
+            return redirect()->intended('dashboard');
+        } else {
+            // Authentication failed
+            return back()->withInput()->with('fail', 'Invalid email or password');
+        }
     } else {
-        // Authentication failed
-        return back()->withInput()->with('fail', 'Invalid email or password');
+        // If the user doesn't exist or is not active, display appropriate message
+        return back()->withInput()->with('fail', 'User is inactive. Please contact the admin.');
     }
 }
     public function dashboard(Request $request)
